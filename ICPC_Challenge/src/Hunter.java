@@ -136,86 +136,86 @@ public class Hunter {
       markChildren(ground, cList);
 
       // Decide what each child should do
-//      for (int i = 0; i < Const.CCOUNT; i++) {
-//        Child c = cList[i];
-//        Move m = new Move();
-//
-//        if (c.dazed == 0) {
-//          // See if the child needs a new destination.
-//          while (runTimer[i] <= 0 || runTarget[i].equals(c.pos)) {
-//            runTarget[i].setLocation(rnd.nextInt(Const.SIZE), rnd.nextInt(Const.SIZE));
-//            runTimer[i] = 1 + rnd.nextInt(14);
-//          }
-//
-//          // Try to acquire a snowball if we need one.
-//          if (c.holding != Const.HOLD_S1) {
-//            // Crush into a snowball, if we have snow.
-//            if (c.holding == Const.HOLD_P1) {
-//              m.action = "crush";
-//            } else {
-//              // We don't have snow, see if there is some nearby.
-//              int sx = -1, sy = -1;
-//              for (int ox = c.pos.x - 1; ox <= c.pos.x + 1; ox++)
-//                for (int oy = c.pos.y - 1; oy <= c.pos.y + 1; oy++) {
-//                  // Is there snow to pick up?
-//                  if (ox >= 0 && ox < Const.SIZE &&
-//                      oy >= 0 && oy < Const.SIZE &&
-//                      (ox != c.pos.x || oy != c.pos.y) &&
-//                      ground[ox][oy] == Const.GROUND_EMPTY &&
-//                      height[ox][oy] > 0) {
-//                    sx = ox;
-//                    sy = oy;
-//                  }
-//                }
-//
-//              // If there is snow, try to get it.
-//              if (sx >= 0) {
-//                if (c.standing) {
-//                  m.action = "crouch";
-//                } else {
-//                  m.action = "pickup";
-//                  m.dest = new Point(sx, sy);
-//                }
-//              }
-//            }
-//          } else {
-//            // Stand up if the child is armed.
-//            if (!c.standing) {
-//              m.action = "stand";
-//            } else {
-//              // Try to find a victim.
-//              boolean victimFound = false;
-//              for (int j = Const.CCOUNT; !victimFound && j < Const.CCOUNT * 2; j++) {
-//                if (cList[j].pos.x >= 0) {
-//                  int dx = cList[j].pos.x - c.pos.x;
-//                  int dy = cList[j].pos.y - c.pos.y;
-//                  int dsq = dx * dx + dy * dy;
-//                  if (dsq < 8 * 8) {
-//                    victimFound = true;
-//                    m.action = "throw";
-//                    // throw past the victim, so we will probably hit them
-//                    // before the snowball falls into the snow.
-//                    m.dest = new Point(c.pos.x + dx * 2, c.pos.y + dy * 2);
-//                  }
-//                }
-//              }
-//            }
-//          }
-//
-//          // Try to run toward the destination.
-//          if (m.action.equals("idle")) {
-//            moveToward(c, runTarget[i], m);
-//            runTimer[i]--;
-//          }
-//        }
-//
-//        /** Write out the child's move */
-//        if (m.dest == null) {
-//          System.out.println(m.action);
-//        } else {
-//          System.out.println(m.action + " " + m.dest.x + " " + m.dest.y);
-//        }
-//      }
+      for (int i = 0; i < Const.CCOUNT; i++) {
+        Child c = cList[i];
+        Move m = new Move();
+
+        if (c.dazed == 0) {
+          // See if the child needs a new destination.
+          while (runTimer[i] <= 0 || runTarget[i].equals(c.pos)) {
+            runTarget[i].setLocation(rnd.nextInt(Const.SIZE), rnd.nextInt(Const.SIZE));
+            runTimer[i] = 1 + rnd.nextInt(14);
+          }
+
+          // Try to acquire a snowball if we need one.
+          if (c.holding != Const.HOLD_S1) {
+            // Crush into a snowball, if we have snow.
+            if (c.holding == Const.HOLD_P1) {
+              m.action = "crush";
+            } else {
+              // We don't have snow, see if there is some nearby.
+              int sx = -1, sy = -1;
+              for (int ox = c.pos.x - 1; ox <= c.pos.x + 1; ox++)
+                for (int oy = c.pos.y - 1; oy <= c.pos.y + 1; oy++) {
+                  // Is there snow to pick up?
+                  if (ox >= 0 && ox < Const.SIZE &&
+                      oy >= 0 && oy < Const.SIZE &&
+                      (ox != c.pos.x || oy != c.pos.y) &&
+                      ground[ox][oy] == Const.GROUND_EMPTY &&
+                      height[ox][oy] > 0) {
+                    sx = ox;
+                    sy = oy;
+                  }
+                }
+
+              // If there is snow, try to get it.
+              if (sx >= 0) {
+                if (c.standing) {
+                  m.action = "crouch";
+                } else {
+                  m.action = "pickup";
+                  m.dest = new Point(sx, sy);
+                }
+              }
+            }
+          } else {
+            // Stand up if the child is armed.
+            if (!c.standing) {
+              m.action = "stand";
+            } else {
+              // Try to find a victim.
+              boolean victimFound = false;
+              for (int j = Const.CCOUNT; !victimFound && j < Const.CCOUNT * 2; j++) {
+                if (cList[j].pos.x >= 0) {
+                  int dx = cList[j].pos.x - c.pos.x;
+                  int dy = cList[j].pos.y - c.pos.y;
+                  int dsq = dx * dx + dy * dy;
+                  if (dsq < 8 * 8) {
+                    victimFound = true;
+                    m.action = "throw";
+                    // throw past the victim, so we will probably hit them
+                    // before the snowball falls into the snow.
+                    m.dest = new Point(c.pos.x + dx * 2, c.pos.y + dy * 2);
+                  }
+                }
+              }
+            }
+          }
+
+          // Try to run toward the destination.
+          if (m.action.equals("idle")) {
+            moveToward(c, runTarget[i], m);
+            runTimer[i]--;
+          }
+        }
+
+        /** Write out the child's move */
+        if (m.dest == null) {
+          System.out.println(m.action);
+        } else {
+          System.out.println(m.action + " " + m.dest.x + " " + m.dest.y);
+        }
+      }
 
       turnNum = in.nextInt();
     }
